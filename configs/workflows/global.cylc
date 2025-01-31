@@ -1,0 +1,5 @@
+[platforms]
+    [[slurm]]
+        hosts = localhost
+        install target = localhost
+        job runner = slurm
