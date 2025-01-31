@@ -1,0 +1,3 @@
+[submodule "src/reobs"]
+	path = src/reobs
+	url = git@gitlab.in2p3.fr:ipsl/espri/espri-obs/reobs/v3/reobs.git
