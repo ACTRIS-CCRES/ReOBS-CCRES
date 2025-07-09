@@ -1,0 +1,212 @@
+#!Jinja2
+
+# Slurm directives : https://slurm.schedmd.com/srun.html
+# Parameters
+# -------------------------------------------------------------------------------------
+# directory
+
+# COMMON VARIABLES
+{% set USER = environ['USER'] %}
+
+{% if "REOBS_BASE_DIR" in environ%}
+    {% set BASE_DIR = environ["REOBS_BASE_DIR"] %}
+{% else %}
+    {% set BASE_DIR ="/home/" + USER + "/ReOBS-CCRES/"%}
+{% endif %}
+
+{% if "REOBS_CONDA_ENV" in environ%}
+    {% set CONDA_ENV = environ["REOBS_CONDA_ENV"] %}
+{% else %}
+    {% set CONDA_ENV = "reobs" %}
+{% endif %}
+
+{% if "REOBS_CONFIG_FILE" in environ%}
+    {% set superviseur_config = environ["REOBS_CONFIG_FILE"] %}
+{% elif "REOBS_PROD" in environ and environ["REOBS_PROD"] in ('true', '1', 't')%}
+    {% set superviseur_config = BASE_DIR + "/configs/treatments/superviseur.cfg" %}
+{% else %}
+    {% set superviseur_config = BASE_DIR + "/configs/treatments/superviseur.dev.cfg" %}
+{% endif %}
+
+{% if "REOBS_SUPERVISOR_OPTIONS" in environ%}
+    {% set superviseur_options=environ["REOBS_SUPERVISOR_OPTIONS"] %}
+{% else %}
+    {% set superviseur_options="" %}
+{% endif %}
+
+{% if "REOBS_DATE" in environ%}
+    {% set date=environ["REOBS_DATE"] %}
+{% else %}
+    {% set date="auto" %}
+{% endif %}
+
+{% set superviseur = BASE_DIR + "src/reobs/reobs/cli/superviseur/superviseur.sh" %}
+{% set reobs_cli = BASE_DIR + "src/reobs/reobs/cli/reobs_cli.py" %}
+{% set deploy_script = BASE_DIR + "configs/workflows/scripts/deploy_on_site.py" %}
+
+# SPECIFIC
+{% set site = "ccres_mindelo" %}
+
+[meta]
+    title = "ReOBS/CCRES MINDELO production"
+
+[scheduler]
+    UTC mode = True
+
+[scheduling]
+    initial cycle point = now
+    runahead limit = PT1H
+
+    [[graph]]
+        R1 = """
+            cloudnet_categorize & cloudnet_classification & cloudnet_drizzle & cloudnet_iwc & cloudnet_lidar & cloudnet_lwc & cloudnet_mwr_multi & cloudnet_mwr_l1c & cloudnet_mwr_single & cloudnet_mwr_single_ah & cloudnet_radar & cloudnet_disdrometer & cloudnet_disdrometer_raw & cloudnet_raingauge => construct_final_2D
+            """
+
+[runtime]
+    [[root]] # suite defaults
+    init-script = """
+                module unload nco
+                module load nco
+                echo Setting up conda environement
+                eval "$(conda shell.bash hook)"
+                conda activate {{ CONDA_ENV }}
+                echo Conda environment {{ CONDA_ENV }} set.
+                echo $(which python) set.
+                """
+    platform = slurm
+    submission retry delays = PT1M, PT1M, PT1H
+    execution retry delays = PT1M, PT1M, PT1H
+
+    [[construct_final_2D]]
+        script = "{{superviseur}} -o init_catalog -d {{ date }} -s {{site}} -f construct_final_2D -c {{superviseur_config}}"
+        [[[directives]]]
+            --time = 24:00:00
+            --mem = 16G
+            --nodes = 1
+            --cpus-per-task = 1
+
+    [[cloudnet_categorize]]
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_categorize -c {{superviseur_config}}"
+
+        [[[directives]]]
+            --time = 04:00:00
+            --mem = 8G
+            --nodes = 1
+            --cpus-per-task = 1
+
+    [[cloudnet_classification]]
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_classification -c {{superviseur_config}}"
+
+        [[[directives]]]
+            --time = 06:00:00
+            --mem = 8G
+            --nodes = 1
+            --cpus-per-task = 1
+
+    [[cloudnet_drizzle]]
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_drizzle -c {{superviseur_config}}"
+
+        [[[directives]]]
+            --time = 03:00:00
+            --mem = 8G
+            --nodes = 1
+            --cpus-per-task = 1
+
+    [[cloudnet_iwc]]
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_iwc -c {{superviseur_config}}"
+
+        [[[directives]]]
+            --time = 03:00:00
+            --mem = 8G
+            --nodes = 1
+            --cpus-per-task = 1
+
+    [[cloudnet_lidar]]
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_lidar -c {{superviseur_config}}"
+
+        [[[directives]]]
+            --time = 12:00:00
+            --mem = 8G
+            --nodes = 1
+            --cpus-per-task = 1
+
+    [[cloudnet_lwc]]
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_lwc -c {{superviseur_config}}"
+
+        [[[directives]]]
+            --time = 05:00:00
+            --mem = 8G
+            --nodes = 1
+            --cpus-per-task = 1
+
+    [[cloudnet_mwr_single]]
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_mwr_single -c {{superviseur_config}}"
+
+        [[[directives]]]
+            --time = 04:00:00
+            --mem = 8G
+            --nodes = 1
+            --cpus-per-task = 1
+
+    [[cloudnet_mwr_single_ah]]
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_mwr_single_ah -c {{superviseur_config}}"
+
+        [[[directives]]]
+            --time = 04:00:00
+            --mem = 8G
+            --nodes = 1
+            --cpus-per-task = 1
+
+    [[cloudnet_mwr_l1c]]
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_mwr_l1c -c {{superviseur_config}}"
+
+        [[[directives]]]
+            --time = 04:00:00
+            --mem = 8G
+            --nodes = 1
+            --cpus-per-task = 1
+
+    [[cloudnet_mwr_multi]]
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_mwr_multi -c {{superviseur_config}}"
+
+        [[[directives]]]
+            --time = 04:00:00
+            --mem = 8G
+            --nodes = 1
+            --cpus-per-task = 1
+
+    [[cloudnet_radar]]
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_radar -c {{superviseur_config}}"
+
+        [[[directives]]]
+            --time = 08:00:00
+            --mem = 8G
+            --nodes = 1
+            --cpus-per-task = 1
+
+    [[cloudnet_disdrometer]]
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_disdrometer -c {{superviseur_config}}"
+
+        [[[directives]]]
+            --time = 08:00:00
+            --mem = 8G
+            --nodes = 1
+            --cpus-per-task = 1
+
+    [[cloudnet_disdrometer_raw]]
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_disdrometer_raw -c {{superviseur_config}}"
+
+        [[[directives]]]
+            --time = 08:00:00
+            --mem = 8G
+            --nodes = 1
+            --cpus-per-task = 1
+
+    [[cloudnet_raingauge]]
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_raingauge -c {{superviseur_config}}"
+
+        [[[directives]]]
+            --time = 08:00:00
+            --mem = 8G
+            --nodes = 1
+            --cpus-per-task = 1
