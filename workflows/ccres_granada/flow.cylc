@@ -86,7 +86,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_categorize]]
-        script = "{{superviseur}} {{superviseur_options}} -d {{ date }} -s {{site}} -f cloudnet_categorize -c {{superviseur_config}}"
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_categorize -c {{superviseur_config}}"
 
         [[[directives]]]
             --time = 04:00:00
@@ -95,7 +95,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_classification]]
-        script = "{{superviseur}} {{superviseur_options}} -d {{ date }} -s {{site}} -f cloudnet_classification -c {{superviseur_config}}"
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_classification -c {{superviseur_config}}"
 
         [[[directives]]]
             --time = 06:00:00
@@ -104,7 +104,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_drizzle]]
-        script = "{{superviseur}} {{superviseur_options}} -d {{ date }} -s {{site}} -f cloudnet_drizzle -c {{superviseur_config}}"
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_drizzle -c {{superviseur_config}}"
 
         [[[directives]]]
             --time = 03:00:00
@@ -113,7 +113,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_iwc]]
-        script = "{{superviseur}} {{superviseur_options}} -d {{ date }} -s {{site}} -f cloudnet_iwc -c {{superviseur_config}}"
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_iwc -c {{superviseur_config}}"
 
         [[[directives]]]
             --time = 03:00:00
@@ -122,7 +122,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_lidar]]
-        script = "{{superviseur}} {{superviseur_options}} -d {{ date }} -s {{site}} -f cloudnet_lidar -c {{superviseur_config}}"
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_lidar -c {{superviseur_config}}"
 
         [[[directives]]]
             --time = 12:00:00
@@ -131,7 +131,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_lwc]]
-        script = "{{superviseur}} {{superviseur_options}} -d {{ date }} -s {{site}} -f cloudnet_lwc -c {{superviseur_config}}"
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_lwc -c {{superviseur_config}}"
 
         [[[directives]]]
             --time = 05:00:00
@@ -140,7 +140,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_mwr_single]]
-        script = "{{superviseur}} {{superviseur_options}} -d {{ date }} -s {{site}} -f cloudnet_mwr_single -c {{superviseur_config}}"
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_mwr_single -c {{superviseur_config}}"
 
         [[[directives]]]
             --time = 04:00:00
@@ -149,7 +149,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_mwr_single_ah]]
-        script = "{{superviseur}} {{superviseur_options}} -d {{ date }} -s {{site}} -f cloudnet_mwr_single_ah -c {{superviseur_config}}"
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_mwr_single_ah -c {{superviseur_config}}"
 
         [[[directives]]]
             --time = 04:00:00
@@ -158,7 +158,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_mwr_l1c]]
-        script = "{{superviseur}} {{superviseur_options}} -d {{ date }} -s {{site}} -f cloudnet_mwr_l1c -c {{superviseur_config}}"
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_mwr_l1c -c {{superviseur_config}}"
 
         [[[directives]]]
             --time = 04:00:00
@@ -167,7 +167,7 @@
             --cpus-per-task = 1
             
     [[cloudnet_radar]]
-        script = "{{superviseur}} {{superviseur_options}} -d {{ date }} -s {{site}} -f cloudnet_radar -c {{superviseur_config}}"
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_radar -c {{superviseur_config}}"
 
         [[[directives]]]
             --time = 08:00:00
@@ -176,7 +176,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_disdrometer]]
-        script = "{{superviseur}} {{superviseur_options}} -d {{ date }} -s {{site}} -f cloudnet_disdrometer -c {{superviseur_config}}"
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_disdrometer -c {{superviseur_config}}"
 
         [[[directives]]]
             --time = 08:00:00
@@ -185,7 +185,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_disdrometer_raw]]
-        script = "{{superviseur}} {{superviseur_options}} -d {{ date }} -s {{site}} -f cloudnet_disdrometer_raw -c {{superviseur_config}}"
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_disdrometer_raw -c {{superviseur_config}}"
 
         [[[directives]]]
             --time = 08:00:00
@@ -194,7 +194,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_meteo]]
-        script = "{{superviseur}} {{superviseur_options}} -d {{ date }} -s {{site}} -f cloudnet_meteo -c {{superviseur_config}}"
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_meteo -c {{superviseur_config}}"
 
         [[[directives]]]
             --time = 08:00:00

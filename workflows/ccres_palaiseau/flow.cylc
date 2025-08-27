@@ -59,7 +59,7 @@
 
     [[graph]]
         R1 = """
-            cloudnet_categorize & cloudnet_classification & cloudnet_drizzle & cloudnet_iwc & cloudnet_lidar & cloudnet_lwc & cloudnet_mwr_multi & cloudnet_mwr_l1c & cloudnet_radar & cloudnet_disdrometer & cloudnet_disdrometer_raw & cloudnet_meteo => construct_final_2D
+            cloudnet_categorize & cloudnet_classification & cloudnet_drizzle & cloudnet_iwc & cloudnet_lidar & cloudnet_lwc & cloudnet_mwr_multi & cloudnet_mwr_l1c & cloudnet_mwr_single & cloudnet_mwr_single_ah & cloudnet_radar & cloudnet_disdrometer & cloudnet_disdrometer_raw & cloudnet_meteo => construct_final_2D
             """
 
 [runtime]
