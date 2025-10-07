@@ -59,7 +59,7 @@
 
     [[graph]]
         R1 = """
-            cloudnet_categorize & cloudnet_classification & cloudnet_drizzle & cloudnet_iwc & cloudnet_lidar & cloudnet_lwc & cloudnet_mwr_multi & cloudnet_mwr_l1c & cloudnet_mwr_single & cloudnet_mwr_single_ah & cloudnet_radar & cloudnet_disdrometer & cloudnet_disdrometer_raw & cloudnet_raingauge => construct_final_2D
+            cloudnet_categorize & cloudnet_classification & cloudnet_der & cloudnet_drizzle & cloudnet_ier & cloudnet_iwc & cloudnet_lidar & cloudnet_doppler_lidar & cloudnet_doppler_lidar_wind & cloudnet_doppler_lidar_epsilon &cloudnet_lwc & cloudnet_mwr_multi & cloudnet_mwr_l1c & cloudnet_mwr_single & cloudnet_mwr_single_ah & cloudnet_radar & cloudnet_disdrometer & cloudnet_disdrometer_raw & cloudnet_raingauge => construct_final_2D
             """
 
 [runtime]
@@ -103,11 +103,29 @@
             --nodes = 1
             --cpus-per-task = 1
 
+    [[cloudnet_der]]
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_der -c {{superviseur_config}}"
+
+        [[[directives]]]
+            --time = 04:00:00
+            --mem = 8G
+            --nodes = 1
+            --cpus-per-task = 1
+
     [[cloudnet_drizzle]]
         script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_drizzle -c {{superviseur_config}}"
 
         [[[directives]]]
             --time = 03:00:00
+            --mem = 8G
+            --nodes = 1
+            --cpus-per-task = 1
+
+    [[cloudnet_ier]]
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_ier -c {{superviseur_config}}"
+
+        [[[directives]]]
+            --time = 04:00:00
             --mem = 8G
             --nodes = 1
             --cpus-per-task = 1
@@ -129,6 +147,34 @@
             --mem = 8G
             --nodes = 1
             --cpus-per-task = 1
+
+    [[cloudnet_doppler_lidar]]
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_doppler_lidar -c {{superviseur_config}}"
+
+        [[[directives]]]
+            --time = 08:00:00
+            --mem = 8G
+            --nodes = 1
+            --cpus-per-task = 1
+
+    [[cloudnet_doppler_lidar_wind]]
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_doppler_lidar_wind -c {{superviseur_config}}"
+
+        [[[directives]]]
+            --time = 08:00:00
+            --mem = 8G
+            --nodes = 1
+            --cpus-per-task = 1
+
+    [[cloudnet_doppler_lidar_epsilon]]
+        script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_doppler_lidar_epsilon -c {{superviseur_config}}"
+
+        [[[directives]]]
+            --time = 08:00:00
+            --mem = 8G
+            --nodes = 1
+            --cpus-per-task = 1
+
 
     [[cloudnet_lwc]]
         script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_lwc -c {{superviseur_config}}"
