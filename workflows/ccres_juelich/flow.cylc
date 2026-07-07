@@ -153,8 +153,8 @@
         script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_doppler_lidar -c {{superviseur_config}}"
 
         [[[directives]]]
-            --time = 08:00:00
-            --mem = 8G
+            --time = 18:00:00
+            --mem = 32G
             --nodes = 1
             --cpus-per-task = 1
 
@@ -162,8 +162,8 @@
         script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_doppler_lidar_wind -c {{superviseur_config}}"
 
         [[[directives]]]
-            --time = 08:00:00
-            --mem = 8G
+            --time = 18:00:00
+            --mem = 16G
             --nodes = 1
             --cpus-per-task = 1
 
@@ -171,8 +171,8 @@
         script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_doppler_lidar_epsilon -c {{superviseur_config}}"
 
         [[[directives]]]
-            --time = 08:00:00
-            --mem = 8G
+            --time = 18:00:00
+            --mem = 16G
             --nodes = 1
             --cpus-per-task = 1
 
