@@ -36,7 +36,9 @@ def get_parser():
     parser = argparse.ArgumentParser(description="Plot nc files")
     parser.add_argument("--site", required=True, help="Site name")
     parser.add_argument("--folder_version", required=True, help="Folder version")
-    parser.add_argument("--file", required=True, help="Name of the folder to symlink from")
+    parser.add_argument(
+        "--file", required=True, help="Name of the folder to symlink from"
+    )
     parser.add_argument(
         "--quicklooks_folder",
         required=True,
@@ -47,9 +49,15 @@ def get_parser():
         required=True,
         help="Name of the folder of multi-year-synthesis plots to symlink from",
     )
-    parser.add_argument("--quicklooks_json", required=True, help="JSON used for quicklooks")
-    parser.add_argument("--synthesis_json", required=True, help="JSON used for synthesis")
-    parser.add_argument("--reobs_json", required=True, help="JSON used for variables tabular")
+    parser.add_argument(
+        "--quicklooks_json", required=True, help="JSON used for quicklooks"
+    )
+    parser.add_argument(
+        "--synthesis_json", required=True, help="JSON used for synthesis"
+    )
+    parser.add_argument(
+        "--reobs_json", required=True, help="JSON used for variables tabular"
+    )
 
     return parser
 
@@ -62,13 +70,19 @@ class ReOBSDeploymentCopier:
 
     def copy_file(self, filepath: str):
         hard_file_path = os.path.join(
-            FINAL_DIR, self.site, self.folder_version, DATA_NAME, os.path.basename(filepath)
+            FINAL_DIR,
+            self.site,
+            self.folder_version,
+            DATA_NAME,
+            os.path.basename(filepath),
         )
         os.makedirs(os.path.dirname(hard_file_path), exist_ok=True)
         shutil.copyfile(filepath, hard_file_path)
 
     def copy_ql(self, ql_folder: str):
-        hard_ql_dir = os.path.join(FINAL_DIR, self.site, self.folder_version, FIGURE_NAME, QL_NAME)
+        hard_ql_dir = os.path.join(
+            FINAL_DIR, self.site, self.folder_version, FIGURE_NAME, QL_NAME
+        )
         os.makedirs(os.path.dirname(hard_ql_dir), exist_ok=True)
         shutil.copyfile(ql_folder, hard_ql_dir)
 
@@ -80,7 +94,9 @@ class ReOBSDeploymentCopier:
         shutil.copyfile(synthesis_folder, hard_synthesis_dir)
 
     def copy_jsons(self, ql_json_path: str, synthesis_json_path: str, reobs_json: str):
-        hard_json_dir = os.path.join(FINAL_DIR, self.site, self.folder_version, JSON_NAME)
+        hard_json_dir = os.path.join(
+            FINAL_DIR, self.site, self.folder_version, JSON_NAME
+        )
         os.makedirs(os.path.dirname(hard_json_dir), exist_ok=True)
         shutil.copyfile(
             ql_json_path,
@@ -118,7 +134,11 @@ class ReOBSDeploymentSymlinker:
         if os.path.exists(self.paths.SYM_FILE_NAME):
             os.remove(self.paths.SYM_FILE_NAME)
         hard_file_path = os.path.join(
-            FINAL_DIR, self.site, self.folder_version, DATA_NAME, os.path.basename(filepath)
+            FINAL_DIR,
+            self.site,
+            self.folder_version,
+            DATA_NAME,
+            os.path.basename(filepath),
         )
         os.symlink(hard_file_path, self.paths.SYM_FILE_NAME)
 
@@ -126,7 +146,9 @@ class ReOBSDeploymentSymlinker:
         os.makedirs(os.path.dirname(self.paths.SYM_JSON_DIR), exist_ok=True)
         if os.path.exists(self.paths.SYM_JSON_DIR):
             os.rmdir(self.paths.SYM_JSON_DIR)
-        hard_json_dir = os.path.join(FINAL_DIR, self.site, self.folder_version, JSON_NAME)
+        hard_json_dir = os.path.join(
+            FINAL_DIR, self.site, self.folder_version, JSON_NAME
+        )
         os.symlink(hard_json_dir, self.paths.SYM_JSON_DIR, target_is_directory=True)
 
     def symlink_ql(self):
@@ -145,7 +167,9 @@ class ReOBSDeploymentSymlinker:
         hard_json_dir = os.path.join(
             FINAL_DIR, self.site, self.folder_version, FIGURE_NAME, SYNTHESIS_NAME
         )
-        os.symlink(hard_json_dir, self.paths.SYM_SYNTHESIS_DIR, target_is_directory=True)
+        os.symlink(
+            hard_json_dir, self.paths.SYM_SYNTHESIS_DIR, target_is_directory=True
+        )
 
 
 def main():
