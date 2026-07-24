@@ -3,7 +3,7 @@ import sys
 import subprocess
 import click
 
-REOBS_DIR = os.path.abspath("/home/reobs/reobs/")
+REOBS_DIR = os.path.abspath("/home/ccres/flux/ReOBS-CCRES/src/reobs")
 
 
 # cd reobs/configs/workflows/sirta_1D
