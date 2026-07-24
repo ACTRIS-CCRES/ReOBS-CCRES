@@ -1,6 +1,6 @@
 import os
 import sys
-import subprocess
+
 import click
 
 REOBS_DIR = os.path.abspath("/home/ccres/flux/ReOBS-CCRES/src/reobs")
@@ -22,9 +22,11 @@ click.argument("-superviseur", "--su", default="superviseur.dev.cfg")
 click.argument("-site", "--site", required=True)
 click.argument("date_start", type=click.DateTime(formats=["%Y%m%d"]))
 click.argument("date_end", type=click.DateTime(formats=["%Y%m%d"]))
+
+
 def run_cylc(superviseur, site, date_start, date_end):
     ""
-    
+
     return 0
 
 
