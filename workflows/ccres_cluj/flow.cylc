@@ -192,7 +192,7 @@
             --mem = 8G
             --nodes = 1
             --cpus-per-task = 1
-            
+
     [[cloudnet_mwr_multi]]
         script = "{{superviseur}} {{superviseur_options}} -o init_catalog -d {{ date }} -s {{site}} -f cloudnet_mwr_multi -c {{superviseur_config}}"
 
