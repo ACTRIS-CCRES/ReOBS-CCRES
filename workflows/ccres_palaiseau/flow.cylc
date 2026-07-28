@@ -112,7 +112,7 @@
             --cpus-per-task = 1
 
     [[construct_final_2D]]
-        script = """ 
+        script = """
         echo "{{superviseur}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f construct_final_2D -c {{superviseur_config}}"
        {{superviseur}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f construct_final_2D -c {{superviseur_config}}
 """
@@ -124,7 +124,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_categorize]]
-        script = """ 
+        script = """
         echo "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_categorize -c {{superviseur_config}}"
         {{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_categorize -c {{superviseur_config}}
 """
@@ -136,7 +136,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_classification]]
-        script = """ 
+        script = """
         echo  "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_classification -c {{superviseur_config}}"
         {{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_classification -c {{superviseur_config}}
 """
@@ -161,7 +161,7 @@
 
 
     [[cloudnet_drizzle]]
-        script = """ 
+        script = """
         echo "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_drizzle -c {{superviseur_config}}"
         {{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_drizzle -c {{superviseur_config}}
 """
@@ -173,7 +173,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_ier]]
-        script = """ 
+        script = """
         echo "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_ier -c {{superviseur_config}}"
         {{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_ier -c {{superviseur_config}}
 """
@@ -185,7 +185,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_iwc]]
-        script = """ 
+        script = """
         echo "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_iwc -c {{superviseur_config}}"
         {{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_iwc -c {{superviseur_config}}
 """
@@ -197,7 +197,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_lidar]]
-        script = """ 
+        script = """
         echo "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_lidar -c {{superviseur_config}}"
         {{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_lidar -c {{superviseur_config}}
 """
@@ -209,7 +209,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_doppler_lidar]]
-        script = """ 
+        script = """
         echo "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_doppler_lidar -c {{superviseur_config}}"
        {{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_doppler_lidar -c {{superviseur_config}}
 """
@@ -221,7 +221,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_doppler_lidar_wind]]
-        script = """ 
+        script = """
         echo "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_doppler_lidar_wind -c {{superviseur_config}}"
         {{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_doppler_lidar_wind -c {{superviseur_config}}
 """
@@ -233,7 +233,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_doppler_lidar_epsilon]]
-        script = """ 
+        script = """
         echo "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_doppler_lidar_epsilon -c {{superviseur_config}}"
         {{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_doppler_lidar_epsilon -c {{superviseur_config}}
 """
@@ -245,7 +245,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_lwc]]
-        script = """ 
+        script = """
         echo "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_lwc -c {{superviseur_config}}"
         {{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_lwc -c {{superviseur_config}}
 """
@@ -257,7 +257,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_mwr_single]]
-        script = """ 
+        script = """
         echo "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_mwr_single -c {{superviseur_config}}"
         {{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_mwr_single -c {{superviseur_config}}
 """
@@ -269,7 +269,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_mwr_single_ah]]
-        script = """ 
+        script = """
         echo "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_mwr_single_ah -c {{superviseur_config}}"
         {{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_mwr_single_ah -c {{superviseur_config}}
 """
@@ -281,7 +281,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_mwr_l1c]]
-        script = """ 
+        script = """
         echo "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_mwr_l1c -c {{superviseur_config}}"
         {{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_mwr_l1c -c {{superviseur_config}}
 """
@@ -293,7 +293,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_mwr_multi]]
-        script = """ 
+        script = """
         echo "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_mwr_multi -c {{superviseur_config}}"
         {{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_mwr_multi -c {{superviseur_config}}
 """
@@ -305,7 +305,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_radar]]
-        script = """ 
+        script = """
         echo "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_radar -c {{superviseur_config}}"
         {{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_radar -c {{superviseur_config}}
 """
@@ -317,7 +317,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_disdrometer]]
-        script = """ 
+        script = """
         echo "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_disdrometer -c {{superviseur_config}}"
         {{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_disdrometer -c {{superviseur_config}}
 """
@@ -329,7 +329,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_disdrometer_raw]]
-        script = """ 
+        script = """
         echo "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_disdrometer_raw -c {{superviseur_config}}"
         {{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_disdrometer_raw -c {{superviseur_config}}
 """
@@ -341,7 +341,7 @@
             --cpus-per-task = 1
 
     [[cloudnet_meteo]]
-        script = """ 
+        script = """
         echo "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_meteo -c {{superviseur_config}}"
         {{superviseur}} {{superviseur_options}} -o init_catalog -d $(date -d "{{yyyymm}}01 - 6 month" +"%Y%m01")-$(date -d "{{yyyymm}}01 - 5 month - 1 day" +"%Y%m%d") -s {{site}} -f cloudnet_meteo -c {{superviseur_config}}
 """
