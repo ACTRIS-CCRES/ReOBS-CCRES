@@ -49,12 +49,14 @@ repos:
     rev: v0.16.0
     hooks:
       - id: ruff-check
+        exclude: "workflows/run_cylc.py"
         args:
           - --fix
       - id: ruff-format
   - repo: local
     hooks:
       - id: ty
+        exclude: "workflows/run_cylc.py"
         name: ty (type checker)
         entry: uv run ty check
         language: python
