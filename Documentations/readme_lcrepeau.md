@@ -8,4 +8,3 @@ Ajustements des chemins par rapport au compte ccres :
 * configs/treatments/superviseur.dev.cfg
 * workflows/ccres\_palaiseau/flow.cylc
 * workflows/run\_cylc.py
-
