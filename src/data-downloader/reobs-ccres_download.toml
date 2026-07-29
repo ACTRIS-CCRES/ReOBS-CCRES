@@ -1,0 +1,22 @@
+products = [
+    "categorize",
+    "classification",
+    "der",
+    "disdrometer",
+    "doppler-lidar",
+    "doppler-lidar-wind",
+    "drizzle",
+    "epsilon-lidar",
+    "ier",
+    "iwc",
+    "lidar",
+    "lwc",
+    "mwr-l1c",
+    "mwr-multi",
+    "mwr-single",
+    "radar",
+    "rain-gauge",
+    "weather-station",
+]
+
+output_dir_mask = "/scratchx/ccres/cloudnet/{site}/%Y/%m/%d"
