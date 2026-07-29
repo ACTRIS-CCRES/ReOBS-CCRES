@@ -8,8 +8,8 @@
 # ]
 # ///
 import datetime as dt
-import tomllib
 import sys
+import tomllib
 from pathlib import Path
 
 import click
