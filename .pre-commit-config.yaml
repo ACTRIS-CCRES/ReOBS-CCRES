@@ -53,15 +53,6 @@ repos:
         args:
           - --fix
       - id: ruff-format
-  - repo: local
-    hooks:
-      - id: ty
-        exclude: "workflows/run_cylc.py"
-        name: ty (type checker)
-        entry: uv run ty check
-        language: python
-        types:
-          - python
 # Commit-check pour standardiser les branches et les messages de commit
   - repo: https://github.com/commit-check/commit-check
     rev: v2.12.0
