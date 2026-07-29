@@ -23,7 +23,6 @@ output_dir_mask = "/scratchx/ccres/cloudnet/{site}/%Y/%m/%d"
 - `{site}' is used to create a subdirectory for each site.
 - `%Y`, `%m`, `%d` are used to create subdirectories for each year, month and day.
 
-
 ## Usage
 
 ```bash
