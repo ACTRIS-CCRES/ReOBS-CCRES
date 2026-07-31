@@ -232,3 +232,9 @@ En utilisant l'interface de commande en ligne directement :
 $> reobs run -d 20260101-20260722 -g -l -s sirta -f angle_solaire \
   -c /home/$USER/ReOBS/configs/treatments/superviseur.cfg
 ```
+
+## Concaténation des netcdf générés
+
+Pour concaténer des fichiers netCDF sur la variable time, vous pouvez utiliser
+    la commande ncrcat qui nécessite que les fichiers aient une dimension de
+    temps illimitée ([source](https://donneesclimatiques.ca)).
