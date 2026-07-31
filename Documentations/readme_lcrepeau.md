@@ -13,7 +13,7 @@ Il faudra :
 * mettre à jour les visualisations
 * concaténer le fichier mensuel dans le fichier annuel correspondant.
 
-Voir le [cahier des charges](./cahierdescharges.md 'là').
+Voir le [cahier des charges](../README.md 'là').
 
 ## Où
 
