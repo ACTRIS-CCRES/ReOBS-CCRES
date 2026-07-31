@@ -1,0 +1,5 @@
+BASE_DIR = "/home/ccres/flux/basta-ccres"
+EMAIL_FROM = "ccres-grafana@lmd.polytechnique.fr"
+EMAIL_TO = "laurent.crepeau@lmd.ipsl.fr"
+LISTESITES = ["munich"]
+LISTEFILIERES = ["categorize","classification","der","drizzle","ier","iwc","doppler_lidar","doppler_lidar_epsilon","lwc","radar","disdrometer","meteo"]
