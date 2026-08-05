@@ -1,5 +1,9 @@
 # Notes, remarque de Lise
 
+## wiki lleberre
+
+[wiki](https://wiki-ipsl-sirta-df2033.pages.in2p3.fr/chap-4/c4-2-reobs/#la-commande-template)
+
 ## Organisation
 
 J'ai créé un dépôt ReOBS-CCRES sur le GitLab.
