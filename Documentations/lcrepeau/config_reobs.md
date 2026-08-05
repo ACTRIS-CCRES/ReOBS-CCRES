@@ -13,9 +13,11 @@ qui seront effectués sur les données dans une forme de liste :
 
 ```toml
 [nom du traitement 1]
-  détails du traitement
+détails du traitement
+
 [nom du traitement 2]
-  détails du traitement ...
+détails du traitement
+...
 ```
 
 Grâce à un fichier répertoriant les traitements on sait quoi faire avec
@@ -55,19 +57,21 @@ Les fichiers de configuration Chaque fichier de configuration est
 composé de une ou plusieurs sections qui se présente comme ceci :
 
 ```toml
-\[meteoairsol\_air\] processing\_name= "Lecture des fichiers la"
-processing\_code= \${sirta:code\_dir}/core/data\_stream.py config\_file
-= \${sirta:conf\_site\_dir}/meteosirta\_air/meteoairsol\_air.cfg input=
-\$\[base\_meteoairsol\_air\] output= \$\[base\_meteoairsol\_air\_reobs\]
-time\_division = "5 years"
+[meteoairsol_air]
+processing_name= "Lecture des fichiers la"
+processing_code= ${sirta:code_dir}/core/data_stream.py
+config_file = ${sirta:conf_site_dir}/meteosirta_air/meteoairsol_air.cfg
+input= $[base_meteoairsol_air]
+output= $[base_meteoairsol_air_reobs]
+time_division = "5 years"
 ```
 
 Dans une section on retrouve plusieurs parties, d'abord l'entête de la
 section, ici :
 
 ```toml
-[meteoairsol\_air]
-   nom de la section
+[meteoairsol_air]
+nom de la section
 ```
 
 Cet entête contient le nom de la section traitée. On retrouve ensuite le
@@ -76,7 +80,7 @@ utilisées par ReOBS. Les informations fonctionnent par paire
 clef/valeur. Par exemple ici :
 
 ```toml
-time\_division = "5 years"
+time_division = "5 years"
  clef             valeur
  ```
 
