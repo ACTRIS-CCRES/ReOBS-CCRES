@@ -85,12 +85,12 @@ Poser les remarques ou les questions pour Lise Le Berre plutôt que des mèls il
 
 ![graph][internal-source-sui]
 
-[internal-source-sui]: images/conf_reobs_A.baco.png 'Confs ReOBS'
+[internal-source-sui]: lcrepeau/images/conf_reobs_A.baco.png 'Confs ReOBS'
 
 ### Le chapitre 4
 
 Le document A.Baco\_Rapport\_Stage.pdf explique comment configurer les différents
-    fichiers pour traiter avec `reobs`
+    fichiers pour traiter avec `reobs`.
 
 ## Organisation des fichiers pour les stations Palaiseau et Lindenberg
 
@@ -121,7 +121,7 @@ $> $ tree -f
 │   │   ├── ./sites/ccres_lindenberg/ier.cfg
 │   │   ├── ./sites/ccres_lindenberg/iwc.cfg
 │   │   ├── ./sites/ccres_lindenberg/lidar.cfg
-│   │   ├── ./sites/ccres_lindenberg/lwc.cfg
+│   │   ├── ./sites/ccres_lind/home/ccres/flux/ReOBS-CCRES/configs/treatments/superviseur.dev.cfgenberg/lwc.cfg
 │   │   ├── ./sites/ccres_lindenberg/meteo.cfg
 │   │   ├── ./sites/ccres_lindenberg/mwr.cfg
 │   │   ├── ./sites/ccres_lindenberg/mwr_l1c.cfg
@@ -198,7 +198,7 @@ OPTIONS
     -c
      Fichier de configuration
 
-    -s
+    -s/home/ccres/flux/ReOBS-CCRES/configs/treatments/superviseur.dev.cfg
      Site d'observation
 
     -f
