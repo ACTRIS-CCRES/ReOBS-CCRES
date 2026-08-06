@@ -14,7 +14,7 @@
 
 ### @lise/@christophe
 
-- [ ] Intégrer au ReObs "général" le code pour gérer le cas où des données sont manquantes
+- [x] Intégrer au ReObs "général" le code pour gérer le cas où des données sont manquantes
 
 ### @marc-Antoine
 
