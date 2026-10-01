@@ -2,6 +2,8 @@
 workflows/ccres_mensuel/1liste_flow.cylc
 workflows/ccres_mensuel/bad_flow.cylc
 workflows/ccres_mensuel/bon_flow.cylc
+workflows/ccres_juelich/prod_flow.cylc
+workflows/ccres_lampedusa/prod_flow.cylc
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
