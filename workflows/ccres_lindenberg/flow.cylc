@@ -70,9 +70,8 @@
     allow implicit tasks = True
 
 [scheduling]
-    initial cycle point = now
-    initial cycle point = 20260305T1815
-    final cycle point = 20260905T1815
+#   initial cycle point = now
+    initial cycle point = 20261005T1815
     runahead limit = PT1H
 
     [[special tasks]]
