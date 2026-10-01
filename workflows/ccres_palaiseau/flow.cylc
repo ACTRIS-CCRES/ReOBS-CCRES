@@ -72,7 +72,6 @@
 [scheduling]
 #   initial cycle point = now
     initial cycle point = 20261005T1815
-#   final cycle point = 20260905T1815
     runahead limit = PT1H
 
     [[special tasks]]
