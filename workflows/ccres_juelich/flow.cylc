@@ -71,8 +71,7 @@
 
 [scheduling]
 #   initial cycle point = now
-    initial cycle point = 20260305T1815
-    final cycle point = 20260905T1815
+    initial cycle point = 20261005T1815
     runahead limit = PT1H
 
     [[special tasks]]
@@ -130,9 +129,6 @@
 	   construct_final_2D:fail? => echec_tache23
            construct_final_2D? | echec_tache23 => fin
            """
-
-# ORG            cloudnet_mwr_l1c_tophat & cloudnet_mwr_l1c_joyhat => concat_mwr_l1c
-# ORG            cloudnet_categorize & cloudnet_classification & cloudnet_der & cloudnet_drizzle & cloudnet_ier & cloudnet_iwc & cloudnet_lidar & cloudnet_doppler_lidar & cloudnet_doppler_lidar_wind & cloudnet_doppler_lidar_epsilon & cloudnet_lwc & cloudnet_mwr_multi & concat_mwr_l1c & cloudnet_mwr_single & cloudnet_mwr_single_ah & cloudnet_radar & cloudnet_disdrometer & cloudnet_disdrometer_raw & cloudnet_meteo & cloudnet_raingauge => construct_final_2D
 
 [runtime]
     [[root]] # suite defaults
