@@ -50,7 +50,7 @@
 {% set download_env = BASE_DIR + "/Reobs_ccres_cylc_visualisations/bin/activate" %}
 
 [meta]
-    title = "ReOBS/CCRES {{ site }} production"
+    title = "ReOBS/CCRES ccres_{{ site }} production"
     description = """Traitement mensuel de station à partir de fichiers cloudnet téléchargés."""
 
 [task parameters]
@@ -155,7 +155,7 @@
             to = {{email_to}}
 
     [[lancement]]
-        script = """ echo lancement mensuelle ccres_{{ site }}  date : $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD)
+        script = """ echo "lancement mensuelle ccres_{{ site }}  date : $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d')"
 """
     [[telechargement_cloudnet_1]]
         submission polling intervals = PT1M
@@ -163,8 +163,8 @@
 
         script = """
         source {{download_env}}
-        echo "{{download}} --config {{download_config}} --site {{ site }} --date-from $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) --date-to $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD)"
-        {{download}} --config {{download_config}} --site {{ site }} --date-from $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) --date-to $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD)
+        echo "{{download}} --config {{download_config}} --site {{ site }} --date-from $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) --date-to $(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d')"
+        {{download}} --config {{download_config}} --site {{ site }} --date-from $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) --date-to $(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d')
 """
         [[[events]]]
         mail events = failed, execution timeout, submission failed
@@ -182,9 +182,8 @@
         execution polling intervals = PT3M
 
         script = """
-        source {{download_env}}
-        echo "{{download}} --config {{download_config}} --site {{ site }} --date-from $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) --date-to $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD)"
-        {{download}} --config {{download_config}} --site {{ site }} --date-from $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) --date-to $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD)
+        echo "{{download}} --config {{download_config}} --site {{ site }} --date-from $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) --date-to $(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d')"
+        {{download}} --config {{download_config}} --site {{ site }} --date-from $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) --date-to $(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d')
 """
         [[[events]]]
         mail events = failed, execution timeout, submission failed
@@ -201,8 +200,8 @@
         submission polling intervals = PT1M
         execution polling intervals = PT3M
         script = """
-        echo  "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD) -s ccres_{{ site }} -f cloudnet_mwr_l1c_tophat -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING "
-        {{superviseur}} {{superviseur_options}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD) -s ccres_{{ site }} -f cloudnet_mwr_l1c_tophat -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING
+        echo  "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f cloudnet_mwr_l1c_tophat -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING "
+        {{superviseur}} {{superviseur_options}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f cloudnet_mwr_l1c_tophat -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING
 """
         [[[events]]]
         mail events = failed, execution timeout, submission failed
@@ -219,8 +218,8 @@
         submission polling intervals = PT1M
         execution polling intervals = PT3M
         script = """
-        echo  "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD) -s ccres_{{ site }} -f cloudnet_mwr_l1c_joyhat -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING"
-        {{superviseur}} {{superviseur_options}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD) -s ccres_{{ site }} -f cloudnet_mwr_l1c_joyhat -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING
+        echo  "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f cloudnet_mwr_l1c_joyhat -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING"
+        {{superviseur}} {{superviseur_options}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f cloudnet_mwr_l1c_joyhat -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING
 """
         [[[events]]]
         mail events = failed, execution timeout, submission failed
@@ -237,8 +236,8 @@
         submission polling intervals = PT1M
         execution polling intervals = PT3M
         script = """
-        echo  "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD) -s ccres_{{ site }} -f concat_mwr_l1c -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING "
-        {{superviseur}} {{superviseur_options}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD) -s ccres_{{ site }} -f concat_mwr_l1c -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING
+        echo  "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f concat_mwr_l1c -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING"
+        {{superviseur}} {{superviseur_options}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f concat_mwr_l1c -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING
 """
         [[[events]]]
         mail events = failed, execution timeout, submission failed
@@ -255,8 +254,8 @@
         submission polling intervals = PT1M
         execution polling intervals = PT3M
         script = """
-        echo  "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD) -s ccres_{{ site }} -f cloudnet_$CYLC_TASK_PARAM_listefilieres -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING"
-        {{superviseur}} {{superviseur_options}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD) -s ccres_{{ site }} -f cloudnet_$CYLC_TASK_PARAM_listefilieres -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING
+        echo  "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f cloudnet_$CYLC_TASK_PARAM_listefilieres -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING"
+        {{superviseur}} {{superviseur_options}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f cloudnet_$CYLC_TASK_PARAM_listefilieres -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING
 """
         [[[events]]]
         mail events = failed, execution timeout, submission failed
@@ -273,8 +272,8 @@
         submission polling intervals = PT1M
         execution polling intervals = PT3M
         script = """
-        echo "{{superviseur}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD) -s ccres_{{ site }} -f construct_final_2D -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING"
-        {{superviseur}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD) -s ccres_{{ site }} -f construct_final_2D -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING
+        echo "{{superviseur}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f construct_final_2D -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING"
+        {{superviseur}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f construct_final_2D -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING
 """
         [[[events]]]
         mail events = failed, execution timeout, submission failed
