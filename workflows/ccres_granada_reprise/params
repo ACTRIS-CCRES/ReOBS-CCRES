@@ -1,8 +1,8 @@
 BASE_DIR = "/home/ccres/flux/basta-ccres"
 EMAIL_FROM = "ccres-grafana@lmd.polytechnique.fr"
 EMAIL_TO = "laurent.crepeau@lmd.ipsl.fr,jean-francois.ribaud@ipsl.fr"
-LISTEFILIERES = [ "categorize","classification","der","drizzle","ier","iwc","lidar","lwc","mwr_l1c","mwr_single","mwr_single_ah","radar","disdrometer","disdrometer_raw","meteo","cloudnet_mwr_multi" ]
-START = 20230101
-END = 20241231
+LISTEFILIERES = [ "radar_nephele_rpg94","radar_nebula_rpg94","concat_radar_rpg94","categorize","classification","der","drizzle","ier","iwc","lidar","lwc","mwr_l1c","mwr_single","mwr_single_ah","radar","disdrometer","disdrometer_raw","meteo","mwr_multi" ]
+START = 20251001
+END = 20251031
 PRODUCTION_VERSION = "v2026.09.1"
 PRODUCTION_TYPE = "monthly_ccres"
