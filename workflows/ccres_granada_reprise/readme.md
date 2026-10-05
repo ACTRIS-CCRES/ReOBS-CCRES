@@ -25,14 +25,19 @@ $> cat params
 BASE_DIR = "/home/ccres/flux/basta-ccres"
 EMAIL_FROM = "ccres-grafana@lmd.polytechnique.fr"
 EMAIL_TO = "laurent.crepeau@lmd.ipsl.fr,jean-francois.ribaud@ipsl.fr"
-LISTEFILIERES = [ "radar_nephele_rpg94","radar_nebula_rpg94","concat_radar_rpg94","categorize","classification","der","drizzle","ier","iwc","lidar","lwc","mwr_l1c","mwr_single","mwr_single_ah","radar","disdrometer","disdrometer_raw","meteo","mwr_multi" ]
+LISTEFILIERES = [ "radar_nephele_rpg94","radar_nebula_rpg94","categorize","classification","der","drizzle","ier","iwc","lidar","lwc","mwr_l1c","mwr_single","mwr_single_ah","radar","disdrometer","disdrometer_raw","meteo","mwr_multi" ]
 START = 20230401
 END = 20260831
 PRODUCTION_VERSION = "v2026.09.1"
 PRODUCTION_TYPE = "monthly_ccres"
 ```
 
-**ATTENTION: La date END ci-dessus est exclue du traitement.**
+S'il y a des nouvelles filières pures ajoutées au graphe des tâches dans le
+  fichier `flow.cylc`, il faut les ajouter dans le fichier `params` sinon ces
+  tâches ne seront pas traitées. Les tâches de concaténation (concat\_lidar et
+  concat\_radar\_rpg94 ici pour ganada) ne doivent pas être dans params. Ces
+  tâches doivent apparaitre explicitement dans le `flow.cylc`.
+
 **ATTENTION: Les répertoires workflows/ccres_granada_reprise
    et workflows/ccres_granada sont différents.**
 
@@ -44,8 +49,8 @@ $> cylc vip --workflow-name=chaque_mois --run-name=ccres_granada_reprise_test3 \
    --set-file=~/flux/ReOBS-CCRES/workflows/ccres_granada_reprise/params
 ```
 
-Attention à l'argument --run-name= qui doit être unique sinon les logs sont
-  écrasées ou insulte.
+**Attention à l'argument --run-name= qui doit être unique sinon les logs sont
+  écrasées ou insulte(s).**
 
 ## Lancer la suite si besoin
 
