@@ -63,7 +63,7 @@
 # VERSION DU TYPE DE TRAITMENT
     {% set production_type = PRODUCTION_TYPE %}
 # ERREUR NUMERO FILIERES
-    taches = 1..20
+    taches = 1..21
 
 [scheduler]
     UTC mode = True
@@ -120,7 +120,9 @@
           cloudnet_doppler_lidar_epsilon:fail? => echec_tache19
           cloudnet_doppler_lidar_epsilon? | echec_tache19 =>  construct_final_2D?
 	  construct_final_2D:fail? => echec_tache20
-          construct_final_2D? | echec_tache20 => fin
+          construct_final_2D? | echec_tache20 => menage?
+	  menage:fail? => echec_tache21
+          menage? | echec_tache21 => fin
           """
 
 [runtime]
@@ -223,6 +225,22 @@
             --mem = 3500mb
             --nodes = 1
             --cpus-per-task = 1
+
+  [[menage]]
+        submission polling intervals = PT1M
+        execution polling intervals = PT3M
+        script = menage.sh
+        [[[events]]]
+         mail events = failed, execution timeout, submission failed
+        [[[mail]]]
+          from = {{email_from}}
+          to = {{email_to}}
+        [[[directives]]]
+          --export=station={{site}},YYYYMM=$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-2 --template=CCYYMM),product_type={{production_type}},product_version={{production_version}},nettoyage=n
+          --mem=3500mb
+          --partition=zen4
+          --time=0:30:00
+          --ntasks=1
 
     [[fin]]
       script =  """ echo fin lancement mensuelle ccres ccres_{{ site }}.  """
