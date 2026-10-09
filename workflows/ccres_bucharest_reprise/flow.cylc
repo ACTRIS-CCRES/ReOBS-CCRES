@@ -209,8 +209,8 @@
         submission polling intervals = PT1M
         execution polling intervals = PT3M
         script = """
-        echo  "{{superviseur}} {{superviseur_options}} -o init_catalog -d  $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMMDD)-$(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f cloudnet_radar_mira35 -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING "
-        {{superviseur}} {{superviseur_options}} -o init_catalog -d  $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMMDD)-$(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f cloudnet_radar_mira35 -c {{superviseur_config}} --product-version {{ production_version }} --product-type {{ production_type }} --log-level WARNING
+        echo  "{{superviseur}} {{superviseur_options}} -o init_catalog -d  $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMMDD)-$(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f cloudnet_radar_mira35 -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING "
+        {{superviseur}} {{superviseur_options}} -o init_catalog -d  $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMMDD)-$(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f cloudnet_radar_mira35 -c {{superviseur_config}} --product-version {{ production_version }} --product-type {{ production_type }} --log-level WARNING
 """
         [[[events]]]
         mail events = failed, execution timeout, submission failed
