@@ -1,0 +1,5 @@
+EMAIL_FROM = "ccres-grafana@lmd.polytechnique.fr"
+EMAIL_TO = "laurent.crepeau@lmd.ipsl.fr,jean-francois.ribaud@ipsl.fr"
+LISTEFILIERES = [ "categorize","classification","der","drizzle","ier","iwc","lidar","lwc","mwr_multi","mwr_l1c","mwr_single","mwr_single_ah","disdrometer","disdrometer_raw","meteo" ]
+PRODUCTION_VERSION = "v2026.09.1"
+PRODUCTION_TYPE = "monthly_ccres"
