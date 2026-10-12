@@ -57,7 +57,7 @@ if [ $rc -eq 1 ]; then
   product_type=$3
   product_version=$4
   nettoyage="$5"
-  else
+else
 # SPECIAL CYLC
     YYYYMM=$(date -d "today 2 month ago" +"%Y%m")
 # CALCUL DE YYYY
@@ -74,20 +74,25 @@ if [ $rc -eq 1 ]; then
     fi
 fi # if [ $rc -eq 1 ]; then
 
-set -x
+#set -x
 # FICHIER ORIGINAUX
 #/scratchx/ccres/cloudnet/lampedusa/2025/01/17/20250117_lampedusa_classification.nc
 # FICHIERS INTERMEDIAIRES
 #/homedata/ccres/ACTRIS/CCRES/pub/reobs/base/ccres_lampedusa/products/monthly_ccres_v2026_09_1/treatments/cloudnet_meteo/cloudnet_meteo_v2026_09_1_20250101_000000_0y.nc
+# CHANGER POUR S'ALIGNER SUR LE NOM DU REPERTOIRE CREE PAR LE SUPERVISEUR
+product_version_net=$(echo $product_version | sed -e 's/\./_/g')
+echo
+echo "Faire ${YYYYMM} $product_type $product_version_net $nettoyage"
+echo
 # NETTOYAGE DES FICHIERS ORIGINAUX
 find /scratchx/$USER/cloudnet/$station/$YYYY -type f -name "${YYYYMM}??_*.nc"  -exec echo /bin/rm {} \;
 if [ $nettoyage = 'y' ]; then
   find /scratchx/$USER/cloudnet/$station/$YYYY -type f -name "${YYYYMM}??_*.nc"  -exec /bin/rm {} \;
 fi
 # NETTOYAGE DES FICHIERS FILIERES INTERMEDIAIRES
-find /homedata/$USER/ACTRIS/CCRES/pub/reobs/base/ccres_${station}/products/${product_type}_${product_version}/treatments \
-  -type f -name "*${product_version}_${YYYYMM}??_*.nc"  -exec echo /bin/rm {} \;
+find /homedata/$USER/ACTRIS/CCRES/pub/reobs/base/ccres_${station}/products/${product_type}_${product_version_net}/treatments \
+  -type f -name "*${product_version_net}_${YYYYMM}??_*.nc"  -exec echo /bin/rm {} \;
 if [ $nettoyage = 'y' ]; then
-  find /homedata/$USER/ACTRIS/CCRES/pub/reobs/base/ccres_${station}/products/${product_type}_${product_version}/treatments \
-    -type f -name "*${product_version}_${YYYYMM}??_*.nc"  -exec /bin/rm {} \;
+  find /homedata/$USER/ACTRIS/CCRES/pub/reobs/base/ccres_${station}/products/${product_type}_${product_version_net}/treatments \
+    -type f -name "*${product_version_net}_${YYYYMM}??_*.nc"  -exec /bin/rm {} \;
 fi
