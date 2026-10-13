@@ -63,7 +63,7 @@
 # VERSION DU TYPE DE TRAITMENT
     {% set production_type = PRODUCTION_TYPE %}
 # ERREUR NUMERO FILIERES
-    taches = 1..21
+    taches = 1..22
 
 [scheduler]
     UTC mode = True
@@ -71,7 +71,7 @@
 
 [scheduling]
 #   initial cycle point = now
-    initial cycle point = 20261005T1815
+    initial cycle point = 20261105T1715
     runahead limit = PT1H
 
     [[special tasks]]
@@ -122,7 +122,9 @@
 	  cloudnet_raingauge:fail? => echec_tache20
           cloudnet_raingauge? | echec_tache20 =>  construct_final_2D?
 	  construct_final_2D:fail? => echec_tache21
-          construct_final_2D? | echec_tache21 => fin
+          construct_final_2D? | echec_tache21 => menage?
+          menage:fail? => echec_tache22
+          menage? | echec_tache22 => fin
           """
 
 [runtime]
@@ -225,6 +227,22 @@
             --mem = 3500mb
             --nodes = 1
             --cpus-per-task = 1
+
+  [[menage]]
+        submission polling intervals = PT1M
+        execution polling intervals = PT3M
+        script = menage.sh
+        [[[events]]]
+         mail events = failed, execution timeout, submission failed
+        [[[mail]]]
+          from = {{email_from}}
+          to = {{email_to}}
+        [[[directives]]]
+          --export=station={{site}},product_type={{production_type}},product_version={{production_version}},nettoyage=n
+          --mem=3500mb
+          --partition=zen4
+          --time=0:30:00
+          --ntasks=1
 
     [[fin]]
       script =  """ echo fin lancement mensuelle ccres ccres_{{ site }}.  """
