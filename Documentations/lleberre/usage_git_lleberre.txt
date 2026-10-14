@@ -1,0 +1,213 @@
+(base) ccres@spiritx1:~/flux/ReOBS-CCRES$ git branch
+* feat/cylcmensuel
+  feat/data-downloader
+  main
+(base) ccres@spiritx1:~/flux/ReOBS-CCRES$ ^C
+(base) ccres@spiritx1:~/flux/ReOBS-CCRES$ git rebase -i HEAD~30
+(base) ccres@spiritx1:~/flux/ReOBS-CCRES$ git rebase --abort
+fatal: No rebase in progress?
+(base) ccres@spiritx1:~/flux/ReOBS-CCRES$ git config --global --edit
+(base) ccres@spiritx1:~/flux/ReOBS-CCRES$ git config --show-origin --list | grep -Ei 'editor|rebase'
+(base) ccres@spiritx1:~/flux/ReOBS-CCRES$ git fetch origin_workflow --prune
+X11 forwarding request failed on channel 0
+From github.com:ACTRIS-CCRES/ReOBS-CCRES-workflow
+ - [deleted]         (none)     -> origin_workflow/feat/data-downloader
+(base) ccres@spiritx1:~/flux/ReOBS-CCRES$ git branch -a
+* feat/cylcmensuel
+  main
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/main
+  remotes/origin_workflow/feat/cylcmensuel
+  remotes/origin_workflow/main
+(base) ccres@spiritx1:~/flux/ReOBS-CCRES$ GIT_SEQUENCE_EDITOR="code --wait" git rebase -i HEAD~50
+CONFLICT (modify/delete): src/data-downloader/README.md deleted in HEAD and modified in d97d9f2 (feat: first version of the script to download files). Version d97d9f2 (feat: first version of the script to download files) of src/data-downloader/README.md left in tree.
+error: could not apply d97d9f2... feat: first version of the script to download files
+Resolve all conflicts manually, mark them as resolved with
+"git add/rm <conflicted_files>", then run "git rebase --continue".
+You can instead skip this commit: run "git rebase --skip".
+To abort and get back to the state before "git rebase", run "git rebase --abort".
+Could not apply d97d9f2... feat: first version of the script to download files
+(base) ccres@spiritx1:~/flux/ReOBS-CCRES$ git status
+interactive rebase in progress; onto b9fdf98
+Last commands done (26 commands done):
+   pick 89a99ba fix: align input?? in sites/ccres_palaiseau/construct_final_2D.cfg to build construct_final_2D.
+   pick d97d9f2 feat: first version of the script to download files
+  (see more in file .git/rebase-merge/done)
+Next commands to do (24 remaining commands):
+   pick e71f5f7 fix: delete ty in .pre-commit-config.yaml.
+   pick fde8d9d docs: update of Documentations/readme_lcrepeau.md.
+  (use "git rebase --edit-todo" to view and edit)
+You are currently rebasing branch 'feat/cylcmensuel' on 'b9fdf98'.
+  (fix conflicts and then run "git rebase --continue")
+  (use "git rebase --skip" to skip this patch)
+  (use "git rebase --abort" to check out the original branch)
+
+Unmerged paths:
+  (use "git restore --staged <file>..." to unstage)
+  (use "git add/rm <file>..." as appropriate to mark resolution)
+        deleted by us:   src/data-downloader/README.md
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   src/reobs (new commits)
+
+no changes added to commit (use "git add" and/or "git commit -a")
+(base) ccres@spiritx1:~/flux/ReOBS-CCRES$ git diff
+* Unmerged path src/data-downloader/README.md
+diff --git a/src/reobs b/src/reobs
+index c764b59..5d9d37e 160000
+--- a/src/reobs
++++ b/src/reobs
+@@ -1 +1 @@
+-Subproject commit c764b596d18fc28c39e592d4c38c44f264055092
++Subproject commit 5d9d37edfd1105e666feb4414b318e3d1c76b76e
+(base) ccres@spiritx1:~/flux/ReOBS-CCRES$ git checkout --theirs src/data-downloader/README.md
+Updated 1 path from the index
+(base) ccres@spiritx1:~/flux/ReOBS-CCRES$ no changes added to commit (use "git add" and/or "git commit -a")
+(base) ccres@spiritx1:~/flux/ReOBS-CCRES$ git add src/data-downloader/README.md
+(base) ccres@spiritx1:~/flux/ReOBS-CCRES$ git rebase --continue
+[detached HEAD 1297597] feat: first version of the script to download files
+ Author: Marc-Antoine Drouin <marc-antoine.drouin@lmd.ipsl.fr>
+ 1 file changed, 32 insertions(+)
+ create mode 100644 src/data-downloader/README.md
+Successfully rebased and updated refs/heads/feat/cylcmensuel.
+(base) ccres@spiritx1:~/flux/ReOBS-CCRES$ git push origin_workflow feat/cylcmensuel --force-with-lease
+X11 forwarding request failed on channel 0
+Enumerating objects: 249, done.
+Counting objects: 100% (172/172), done.
+Delta compression using up to 48 threads
+Compressing objects: 100% (125/125), done.
+Writing objects: 100% (137/137), 7.58 MiB | 5.60 MiB/s, done.
+Total 137 (delta 71), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (71/71), completed with 8 local objects.
+To github.com:ACTRIS-CCRES/ReOBS-CCRES-workflow.git
+ + 2ded657...7b7eee8 feat/cylcmensuel -> feat/cylcmensuel (forced update)
+(base) ccres@spiritx1:~/flux/ReOBS-CCRES$ git rebase --rebase-merges origin_workflow/main
+CONFLICT (add/add): Merge conflict in src/data-downloader/README.md
+Auto-merging src/data-downloader/README.md
+error: could not apply 1297597... feat: first version of the script to download files
+Resolve all conflicts manually, mark them as resolved with
+"git add/rm <conflicted_files>", then run "git rebase --continue".
+You can instead skip this commit: run "git rebase --skip".
+To abort and get back to the state before "git rebase", run "git rebase --abort".
+Could not apply 1297597... feat: first version of the script to download files
+(base) ccres@spiritx1:~/flux/ReOBS-CCRES$ git checkout --theirs src/data-downloader/README.md
+Updated 1 path from the index
+(base) ccres@spiritx1:~/flux/ReOBS-CCRES$ git add src/data-downloader/README.md
+(base) ccres@spiritx1:~/flux/ReOBS-CCRES$ git rebase --continue
+[detached HEAD 7f46cc5] feat: first version of the script to download files
+ Author: Marc-Antoine Drouin <marc-antoine.drouin@lmd.ipsl.fr>
+ 1 file changed, 1 deletion(-)
+Successfully rebased and updated refs/heads/feat/cylcmensuel.
+(base) ccres@spiritx1:~/flux/ReOBS-CCRES$ git push --force-with-lease origin_workflow feat/cylcmensuel
+X11 forwarding request failed on channel 0
+Enumerating objects: 468, done.
+Counting objects: 100% (468/468), done.
+Delta compression using up to 48 threads
+Compressing objects: 100% (330/330), done.
+Writing objects: 100% (373/373), 7.62 MiB | 5.46 MiB/s, done.
+Total 373 (delta 238), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (238/238), completed with 68 local objects.
+To github.com:ACTRIS-CCRES/ReOBS-CCRES-workflow.git
+ + 7b7eee8...bc17429 feat/cylcmensuel -> feat/cylcmensuel (forced update)
+###############################################
+404  python -m pip list --editable
+405  history | grep "pip install"
+406  history | sed -n '560,590p'
+407  fc -l 560 590
+408  grep -n "pip install -e" ~/.bash_history
+409  grep -n "pip install" ~/.bash_history | tail -50
+410  git branch -a
+411  git switch main
+412  git remote -v
+413  git switch main
+414  git fetch
+415  git pull
+416  gp origin_workflow
+417  git push origin_workflow
+418  git branch -a
+419  git switch feat/cylcmensuel
+420  git rebase --rebase-merges main
+421  git rebase --abort
+422  git rev-list --left-right --count origin/main
+423  git rev-list --left-right --count origin/main...HEAD
+424  git log --online origin/main..HEAD
+425  git log --oneline origin/main..HEAD
+426  git log --oneline HEAD..origin/main
+427  git cherry-pick 5271c1e
+428  git rebase main
+429  git log --graph --oneline --decorate --all --simplify-by-decoration
+430  git rebase --show-current-patch
+431  git rebase origin/main
+432  git status
+433  git rebase --show-current-patch
+434  git status
+435  git diff
+436  git checkout --ours src/data-downloader/get_cloudnet_products.py
+437  git add src/data-downloader/get_cloudnet_products.py
+438  git rebase --continue
+439  git status
+440  git diff
+441  git checkout --theirs src/data-downloader/README.md
+442  git add src/data-downloader/README.md
+443  git rebase --continue
+444  history | tail -500
+445  git switch -c backup
+446  git switch feat/cylcmensuel
+447  git pull
+448  git pull origin_workflow
+449  git pull origin_workflow feat/cylcmensuel
+450  git branch -a
+451  git status
+452  git merge --abort
+453  git fetch origin_workflow
+454  git reset --hard origin_workflow/feat/cylcmensuel
+455  git rebase --rebase-merges origin/main
+456  git status
+457  git diff
+458  git checkout --ours src/data-downloader/get_cloudnet_products.py
+459  git add src/data-downloader/get_cloudnet_products.py
+460  git rebase --continue
+461  git status
+462  git diff
+463  git checkout --theirs src/data-downloader/README.md
+464  git add src/data-downloader/README.md
+465  git rebase --continue
+466  git rebase -i HEAD~299
+467  GIT_SEQUENCE_EDITOR="code --wait" git rebase -i HEAD~299
+468  GIT_SEQUENCE_EDITOR="code --wait --reuse-window" git rebase -i --rebase-merges HEAD~299
+469  GIT_SEQUENCE_EDITOR="code --wait" git rebase -i --rebase-merges HEAD~299
+470  GIT_SEQUENCE_EDITOR='sh -c "code --wait \"$1\""' git rebase -i --rebase-merges HEAD~299
+471  GIT_SEQUENCE_EDITOR="code --wait" git rebase -i --rebase-merges HEAD~299
+472  code --disable-extension eamodio.gitlens
+473  GIT_SEQUENCE_EDITOR="code --wait" git rebase -i --rebase-merges HEAD~299
+474  GIT_SEQUENCE_EDITOR=nano git rebase -i --rebase-merges HEAD~299
+475  GIT_SEQUENCE_EDITOR='bash -c '"'"'cp "$1" /tmp/rebase.txt; code --wait /tmp/rebase.txt; cp /tmp/rebase.txt "$1"'"'"' --' git rebase -i --rebase-merges HEAD~299
+476  git status
+477  git rebase -i HEAD~10
+481  GIT_SEQUENCE_EDITOR="code --wait" git rebase -i HEAD~30
+482  git push --force-with-lease
+483  git push origin_workflow feat/cylcmensuel
+484  git push --force-with-lease  origin_workflow feat/cylcmensuel
+485  git branch -a
+486  git cherry-pick f9352666897e2661c1a2bb9657dbb594e1bb372e a589805d50e4c05033d5da2b03542b9e75fd1360 63212d6155aceafb8be5f6422800a906539a727f 2ef469e3ba62f99fb3eccc3dad069b2016800fbe e0c9a19e10f10fcfca122d1cbb6cf4ae5316f55f
+487  git push origin_workflow
+488  git switch feat/data-downloader
+489  git rebase main
+490  git git branch -a
+491  git branch -a
+492  git rebase origin/main
+493  git switch feat/data-downloader
+494  git push origin_workflow feat/data-downloader
+495  git push --force-with-lease origin_workflow feat/data-downloader
+496  git switch feat/cylcmensuel
+497  git branch
+498  git branch -d backup
+499  git branch -D backup
+500  git branch -a
+501  git log --graph --oneline --decorate --all --merges
+502  git log --oneline --merges feat/cylcmensuel
+Lise LE BERRE
+Ingénieure de recherche – IPSL / SIRTA
+IPSL / LMD – École polytechnique
