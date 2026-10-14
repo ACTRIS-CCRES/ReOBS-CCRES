@@ -1,0 +1,203 @@
+Envoyé: Vendredi 7 Août 2026 12:43:33
+Objet: Re: [CCRES] mise en production ReObs (mise à jour)
+
+Bonjour à tous,
+
+Voici un petit point sur l’état d’avancement de ReOBS avant mon départ en congés.
+Nouvelle version de ReOBS
+
+Une nouvelle version de ReOBS a été intégrée sur la branche master et déployée sur les comptes de production.
+Déploiement
+
+Compte de production reobs
+
+J’ai uniquement mis à jour ReOBS-STATION.
+
+Je n’ai pas mis à jour ReOBS-CCRES sur ce compte, car il ne me semble plus pertinent de maintenir cette copie. Il faudrait éventuellement envisager de la supprimer afin d’éviter qu’elle ne diverge du véritable environnement de production CCRES, qui se trouve sur le compte ccres.
+
+Compte de production ccres
+
+J’ai mis à jour le code dans ReOBS-CCRES, mais je n’ai pas encore poussé les modifications.
+
+Je pense qu’il faut d’abord définir clairement l’organisation de ce projet, car nous avons actuellement deux dépôts GitHub susceptibles de diverger :
+
+    ReOBS-CCRES : https://github.com/ACTRIS-CCRES/ReOBS-CCRES
+
+    ReOBS-CCRES-workflow : https://github.com/ACTRIS-CCRES/ReOBS-CCRES-workflow
+
+Il faudrait notamment décider si nous souhaitons avoir, par exemple, un dépôt pour les configurations et un autre pour les workflows. Dans tous les cas, il faut éviter de maintenir les mêmes configurations dans deux dépôts différents, au risque qu’elles divergent rapidement.
+Principales évolutions de cette version
+1. Gestion des erreurs acceptées
+
+Les fonctionnalités initialement développées pour le projet COSY ont été intégrées.
+
+Elles permettent désormais d’accepter explicitement certains cas qui ne doivent pas nécessairement interrompre une production :
+
+    fichier d’entrée manquant ;
+
+    données manquantes ;
+
+    erreur de catalogue.
+
+Cela se configure avec l’option accept dans les fichiers de filière. Voir la section Accepted control errors de la documentation ReOBS.
+2. Intégration des modifications CCRES sur most_frequent
+
+J’ai également intégré les modifications qui avaient été développées dans la branche CCRES, notamment celles concernant le calcul de la classe la plus fréquente (most_frequent).
+
+Jean-François avait introduit le fait d’ignorer les NaN lors de la recherche de la classe la plus fréquente. J’ai complété cette modification afin que le comportement soit cohérent :
+
+    les NaN sont également ignorés pour la seconde classe la plus fréquente ;
+
+    les pourcentages associés sont maintenant calculés sans prendre les NaN en compte.
+
+Il faudra néanmoins rediscuter du comportement souhaité. Par exemple, si 80 % des données d’une heure sont des NaN, retourner directement NaN plutôt qu’une classe calculée sur les 20 % restants ne serait pas forcément incohérent.
+
+Cela rejoint à mon avis un problème plus général déjà identifié dans les issues  reobs#86 et reobs#83  : le QC5, qui permet de définir le pourcentage minimal de données nécessaires pour considérer une statistique temporelle comme valide, n’est actuellement appliqué qu’à certaines fonctions (moyenne, médiane, écart-type), et pas à l’ensemble des traitements statistiques.
+3. Amélioration de la traçabilité des productions
+
+La fonctionnalité permettant d’améliorer la traçabilité des productions a également été intégrée.
+
+Les fichiers produits contiennent maintenant les métadonnées suivantes :
+
+    reobs_version
+
+    reobs_commit
+
+    config_version
+
+    config_commit
+
+    product_version
+
+    product_type
+
+Pour le moment :
+
+    product_version est obligatoire ;
+
+    product_type est optionnel et vaut request par défaut.
+
+Ce fonctionnement pourra encore être discuté et ajusté si nécessaire.
+
+Un lancement de production se fait donc maintenant, par exemple, de la manière suivante :
+
+/home/$USER/ReOBS-STATION/src/reobs/reobs/cli/superviseur/superviseur.sh \
+    -d 19990101-20251231 \
+    -g -l \
+    -s sirta \
+    -f construct_final_1D \
+    -c /home/$USER/ReOBS-STATION/configs/treatments/superviseur.dev.cfg \
+    --product-type release \
+    --product-version 2026.07.1
+
+4. Autres correctifs
+
+D’autres correctifs ont également été intégrés, notamment :
+
+    amélioration du mécanisme de priorisation et du remplissage des données manquantes à partir des sources de priorité inférieure (reobs#94) ;
+
+    normalisation systématique de la grille temporelle et gestion cohérente de time_bnds (reobs#90).
+
+Documentation
+
+La documentation ReOBS a été mise à jour en conséquence, pour le moment de manière assez succincte.
+
+Les principales sections concernées sont :
+
+    ReOBS and the supervisor
+
+    supervisor configuration file
+
+Modifications à apporter aux configurations
+
+La nouvelle version nécessite quelques adaptations dans les configurations.
+Fichiers superviseur.cfg
+
+Remplacer :
+
+file_version
+
+par :
+
+config_version
+
+Une rétrocompatibilité avec file_version est néanmoins conservée pour le moment.
+
+Remplacer également tous les folder_version par folder_output, et mettre :
+
+folder_output=${sirta:product_type}_${sirta:product_version}
+
+Fichiers filiere_*.cfg
+
+Pour les filières concernées, ajouter l'option accept avec les erreurs que l’on souhaite autoriser, par exemple :
+
+accept=...
+
+Fichiers base_*.cfg
+
+Remplacer les références :
+
+${sirta:file_version}
+
+par :
+
+${sirta:product_type}_${sirta:product_version}
+
+L’objectif est de bien dissocier désormais :
+
+    la version de la configuration utilisée (config_version) ;
+
+    la version du produit généré (product_version) ;
+
+    le type de production (product_type) ;
+
+    le répertoire de sortie (folder_output).
+
+Organisation des projets ReOBS
+
+J’ai également ajouté dans GitLab, sous ipsl/espri/espri-obs/reobs/projects, les projets :
+
+    ReOBS-COPDD
+
+    ReOBS-P2OA
+
+Marc-Antoine avait déjà créé ReOBS-COSY.
+
+Ces dépôts sont encore vides pour le moment. L’objectif est de reprendre le principe utilisé pour ReOBS-STATION et amorcé pour ReOBS-CCRES : séparer les configurations et les workflows propres à chaque projet du cœur du code ReOBS.
+P2OA et COPDD
+
+Le premier objectif est d’y sauvegarder les configurations et workflows historiquement utilisés.
+
+Cela permettra ensuite de supprimer rapidement le dossier de configurations encore présent dans le dépôt du cœur de ReOBS, afin que celui-ci ne contienne plus de configurations spécifiques à un site ou à un projet.
+COSY
+
+L’objectif est similaire, mais il ne s’agit pas uniquement d’archiver les configurations existantes.
+
+Il faudrait également remettre COSY en production en suivant la nouvelle organisation. Actuellement, COSY fonctionne encore avec :
+
+    le cœur de ReOBS ;
+
+    les configurations directement intégrées dans ce dépôt ;
+
+    la branche COSY du dépôt ReOBS ;
+
+    sans utilisation de ReOBS comme sous-module.
+
+L’objectif est donc de revenir à une architecture similaire aux autres projets, avec un cœur ReOBS commun et un projet COSY indépendant contenant ses configurations et ses workflows.
+Nettoyage à venir
+
+Une fois cette organisation mise en place pour ReOBS-STATION, ReOBS-CCRES, ReOBS-COSY, ReOBS-P2OA et ReOBS-COPDD, nous pourrons également faire le ménage dans les branches du dépôt du cœur de ReOBS.
+
+L’objectif serait à terme de :
+
+    supprimer le dossier conf du cœur de ReOBS
+    revenir à une organisation simple avec principalement deux branches pérennes :
+
+        main en remplacement de l'actuel master
+
+        dev-main en remplacement de l'actuel dev-master
+
+
+Voilà pour l’état des lieux avant mon départ. Il reste donc quelques choix d’organisation à discuter, notamment autour de CCRES, mais le cœur de ReOBS est maintenant à jour avec les principales évolutions développées ces derniers mois.
+
+Je serai de retour le lundi 7 septembre. Pour faciliter la reprise et les échanges, je serai à Paris dès mon retour.
