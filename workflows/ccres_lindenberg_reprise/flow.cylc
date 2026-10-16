@@ -58,16 +58,16 @@
 # contact
     {% set email_from = EMAIL_FROM %}
     {% set email_to = EMAIL_TO %}
+# Begining date of the recovery YYYYMMDD format
+    {% set start = START %}
+# End date of the recovery YYYYMMDD format
+    {% set end = END %}
 # VERSION TRAITEMENT
     {% set production_version = PRODUCTION_VERSION %}
 # VERSION DU TYPE DE TRAITMENT
     {% set production_type = PRODUCTION_TYPE %}
 # ERREUR NUMERO FILIERES
-    taches = 1..20
-# NUMERO TELECHARGEMENT
-# 1 TELECHARGEMENT
-# 2 VERIFICATION DES FICHIERS
-    nbrtele = 1,2
+    taches = 1..22
 
 [scheduler]
     UTC mode = True
@@ -75,8 +75,8 @@
 
 [scheduling]
     initial cycle point = now
-    initial cycle point = 20260405T1815
-    final cycle point = 20260905T1815
+    initial cycle point = {{ START }}
+    final cycle point = {{ END }}
     runahead limit = PT1H
 
     [[special tasks]]
@@ -84,7 +84,7 @@
 
     [[graph]]
         P1M = """
-          lancement [-P1M] => lancement => telechargement_cloudnet_1 => telechargement_cloudnet_2
+         lancement [-P1M] => lancement => telechargement_cloudnet_1 => telechargement_cloudnet_2
 	  telechargement_cloudnet_2 => cloudnet_categorize?
 	  cloudnet_categorize:fail? => echec_tache1
 	  cloudnet_categorize? | echec_tache1 => cloudnet_classification?
@@ -123,9 +123,12 @@
           cloudnet_doppler_lidar_wind:fail? => echec_tache18
           cloudnet_doppler_lidar_wind? | echec_tache18 => cloudnet_doppler_lidar_epsilon?
           cloudnet_doppler_lidar_epsilon:fail? => echec_tache19
-          cloudnet_doppler_lidar_epsilon? | echec_tache19 =>  construct_final_2D?
-	  construct_final_2D:fail? => echec_tache20
-          construct_final_2D? | echec_tache20 => fin
+          cloudnet_doppler_lidar_epsilon? | echec_tache19 =>  cloudnet_raingauge?
+          cloudnet_raingauge? | echec_tache20 =>  construct_final_2D?
+          construct_final_2D:fail? => echec_tache21
+          construct_final_2D? | echec_tache21 => menage?
+          menage:fail? => echec_tache22
+          menage? | echec_tache22 => fin
           """
 
 [runtime]
@@ -160,8 +163,8 @@
         execution polling intervals = PT3M
 
         script = """
-        echo "{{download}} --config {{download_config}} --site {{ site }} --date-from $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) --date-to $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD)"
-        {{download}} --config {{download_config}} --site {{ site }} --date-from $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) --date-to $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD)
+        echo "{{download}} --config {{download_config}} --site {{ site }} --date-from $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) --date-to $(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d')"
+        {{download}} --config {{download_config}} --site {{ site }} --date-from $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) --date-to $(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d')
 """
         [[[events]]]
         mail events = failed, execution timeout, submission failed
@@ -173,16 +176,14 @@
             --mem = 3500mb
             --nodes = 1
             --cpus-per-task = 1
-#
-#       source {{download_env}}
 
     [[telechargement_cloudnet_2]]
         submission polling intervals = PT1M
         execution polling intervals = PT3M
 
         script = """
-        echo "{{download}} --config {{download_config}} --site {{ site }} --date-from $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) --date-to $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD)"
-        {{download}} --config {{download_config}} --site {{ site }} --date-from $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) --date-to $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD)
+        echo "{{download}} --config {{download_config}} --site {{ site }} --date-from $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) --date-to $(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d')"
+        {{download}} --config {{download_config}} --site {{ site }} --date-from $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) --date-to $(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d')
 """
         [[[events]]]
         mail events = failed, execution timeout, submission failed
@@ -199,8 +200,8 @@
         submission polling intervals = PT1M
         execution polling intervals = PT3M
         script = """
-        echo  "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD) -s ccres_{{ site }} -f cloudnet_$CYLC_TASK_PARAM_listefilieres -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} "
-        {{superviseur}} {{superviseur_options}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD) -s ccres_{{ site }} -f cloudnet_$CYLC_TASK_PARAM_listefilieres -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }}
+        echo  "{{superviseur}} {{superviseur_options}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f cloudnet_$CYLC_TASK_PARAM_listefilieres -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }}"
+        {{superviseur}} {{superviseur_options}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f cloudnet_$CYLC_TASK_PARAM_listefilieres -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }}
 """
         [[[events]]]
         mail events = failed, execution timeout, submission failed
@@ -217,8 +218,8 @@
         submission polling intervals = PT1M
         execution polling intervals = PT3M
         script = """
-        echo "{{superviseur}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD) -s ccres_{{ site }} -f construct_final_2D -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} "
-        {{superviseur}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=0 --offset-days=-5 --template=CCYYMMDD) -s ccres_{{ site }} -f construct_final_2D -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }}
+        echo "{{superviseur}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f construct_final_2D -c {{superviseur_config}} --product-version {{ production_version }} --product-type {{ production_type }}"
+        {{superviseur}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01)-$(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-1 --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f construct_final_2D -c {{superviseur_config}} --product-version {{ production_version }} --product-type {{ production_type }}
 """
         [[[events]]]
         mail events = failed, execution timeout, submission failed
@@ -230,6 +231,25 @@
             --mem = 3500mb
             --nodes = 1
             --cpus-per-task = 1
+
+  [[menage]]
+        submission polling intervals = PT1M
+        execution polling intervals = PT3M
+        script = """
+	YYYYMM=$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMM)
+        menage.sh
+"""
+        [[[events]]]
+         mail events = failed, execution timeout, submission failed
+        [[[mail]]]
+          from = {{email_from}}
+          to = {{email_to}}
+        [[[directives]]]
+          --export=station={{site}},YYYYMM=$YYYYMM,product_type={{production_type}},product_version={{production_version}},flag_nettoyage=n
+          --mem=3500mb
+          --partition=zen4
+          --time=0:30:00
+          --ntasks=1
 
     [[fin]]
       script =  """ echo fin lancement mensuelle ccres ccres_{{ site }}.  """
