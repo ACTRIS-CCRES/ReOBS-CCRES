@@ -244,13 +244,18 @@
         submission polling intervals = PT1M
         execution polling intervals = PT3M
         script = menage.sh
+        script = """
+               YYYYMM=$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-2 --template=CCYYMM)
+               echo "YYYYMM $YYYYMM"
+               menage.sh
+"""
         [[[events]]]
          mail events = failed, execution timeout, submission failed
         [[[mail]]]
           from = {{email_from}}
           to = {{email_to}}
         [[[directives]]]
-          --export=station={{site}},product_type={{production_type}},product_version={{production_version}},nettoyage=n
+          --export=station={{site}},YYYYMM=$YYYYMM,product_type={{production_type}},product_version={{production_version}},flag_nettoyage=n
           --mem=3500mb
           --partition=zen4
           --time=0:30:00
