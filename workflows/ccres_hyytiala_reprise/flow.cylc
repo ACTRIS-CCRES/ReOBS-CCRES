@@ -1,0 +1,257 @@
+#!Jinja2
+
+# Slurm directives : https://slurm.schedmd.com/srun.html
+# Parameters
+# -------------------------------------------------------------------------------------
+
+# SPECIFIC
+{% set site = "hyytiala" %}
+
+# COMMON VARIABLES
+{% set USER = environ['USER'] %}
+
+{% if "REOBS_BASE_DIR" in environ%}
+    {% set BASE_DIR = environ["REOBS_BASE_DIR"] %}
+{% else %}
+    {% set BASE_DIR ="/home/" + USER + "/flux/ReOBS-CCRES"%}
+{% endif %}
+
+{% if "REOBS_CONDA_ENV" in environ%}
+    {% set CONDA_ENV = environ["REOBS_CONDA_ENV"] %}
+{% else %}
+    {% set CONDA_ENV = "/homedata/ccres/python_envs/reobs" %}
+{% endif %}
+
+{% if "REOBS_CONFIG_FILE" in environ%}
+    {% set superviseur_config = environ["REOBS_CONFIG_FILE"] %}
+{% elif "REOBS_PROD" in environ and environ["REOBS_PROD"] in ('true', '1', 't')%}
+    {% set superviseur_config = BASE_DIR + "/configs/treatments/superviseur.cfg" %}
+{% else %}
+    {% set superviseur_config = BASE_DIR + "/configs/treatments/superviseur.dev.cfg" %}
+{% endif %}
+
+{% if "REOBS_SUPERVISOR_OPTIONS" in environ%}
+    {% set superviseur_options=environ["REOBS_SUPERVISOR_OPTIONS"] %}
+{% else %}
+    {% set superviseur_options="" %}
+{% endif %}
+
+{% if "REOBS_DATE" in environ%}
+    {% set date=environ["REOBS_DATE"] %}
+{% else %}
+    {% set date="auto" %}
+{% endif %}
+
+{% set superviseur = BASE_DIR + "/src/reobs/reobs/cli/superviseur/superviseur.sh" %}
+{% set reobs_cli = BASE_DIR + "/src/reobs/reobs/cli/reobs_cli.py" %}
+{% set deploy_script = BASE_DIR + "/configs/workflows/scripts/deploy_on_site.py" %}
+{% set download = BASE_DIR +  "/src/data-downloader/get_cloudnet_products.py" %}
+{% set download_config = BASE_DIR + "/src/data-downloader/reobs-ccres_download.toml" %}
+{% set download_env = BASE_DIR + "/Reobs_ccres_cylc_visualisations/bin/activate" %}
+
+[meta]
+    title = "ReOBS/CCRES ccres_{{ site }} production"
+    description = """Traitement mensuel de station à partir de fichiers cloudnet téléchargés."""
+
+[task parameters]
+    listefilieres = {{LISTEFILIERES|join(",")}}
+# contact
+    {% set email_from = EMAIL_FROM %}
+    {% set email_to = EMAIL_TO %}
+# Begining date of the recovery YYYYMMDD format
+    {% set start = START %}
+# End date of the recovery YYYYMMDD format
+    {% set end = END %}
+# VERSION TRAITEMENT
+    {% set production_version = PRODUCTION_VERSION %}
+# VERSION DU TYPE DE TRAITMENT
+    {% set production_type = PRODUCTION_TYPE %}
+# ERREUR NUMERO FILIERES
+    taches = 1..21
+
+[scheduler]
+    UTC mode = True
+    allow implicit tasks = True
+
+[scheduling]
+    initial cycle point = now
+    initial cycle point = {{ START }}
+    final cycle point = {{ END }}
+    runahead limit = PT1H
+
+    [[special tasks]]
+        clock-trigger = lancement
+
+    [[graph]]
+        P1M = """
+          lancement [-P1M] => lancement => telechargement_cloudnet_1 => telechargement_cloudnet_2
+          telechargement_cloudnet_2 => cloudnet_categorize?
+          cloudnet_categorize:fail? => echec_tache1
+          cloudnet_categorize? | echec_tache1 => cloudnet_classification?
+          cloudnet_classification:fail? => echec_tache2
+          cloudnet_classification? | echec_tache2 => cloudnet_der?
+          cloudnet_der:fail? => echec_tache3
+          cloudnet_der? | echec_tache3 => cloudnet_drizzle?
+          cloudnet_drizzle:fail? => echec_tache4
+          cloudnet_drizzle? | echec_tache4 => cloudnet_ier?
+          cloudnet_ier:fail? => echec_tache5
+          cloudnet_ier? | echec_tache5 => cloudnet_iwc?
+          cloudnet_iwc:fail? => echec_tache6
+          cloudnet_iwc? | echec_tache6 => cloudnet_lidar?
+          cloudnet_lidar:fail? => echec_tache7
+          cloudnet_lidar? | echec_tache7 => cloudnet_lwc?
+          cloudnet_lwc:fail? => echec_tache8
+          cloudnet_lwc? | echec_tache8 => cloudnet_mwr_l1c?
+          cloudnet_mwr_l1c:fail? => echec_tache9
+          cloudnet_mwr_l1c? | echec_tache9 => cloudnet_mwr_single?
+          cloudnet_mwr_single:fail? => echec_tache10
+          cloudnet_mwr_single? | echec_tache10 => cloudnet_mwr_single_ah?
+          cloudnet_mwr_single_ah:fail? => echec_tache11
+          cloudnet_mwr_single_ah? | echec_tache11 => cloudnet_radar?
+          cloudnet_radar:fail? => echec_tache12
+          cloudnet_radar? | echec_tache12 => cloudnet_disdrometer?
+          cloudnet_disdrometer:fail? => echec_tache13
+          cloudnet_disdrometer? | echec_tache13 => cloudnet_disdrometer_raw?
+          cloudnet_disdrometer_raw:fail? => echec_tache14
+          cloudnet_disdrometer_raw? | echec_tache14 => cloudnet_meteo?
+          cloudnet_meteo:fail? => echec_tache15
+          cloudnet_meteo? | echec_tache15 => cloudnet_mwr_multi?
+          cloudnet_mwr_multi:fail? => echec_tache16
+          cloudnet_mwr_multi? | echec_tache16 =>  cloudnet_doppler_lidar?
+          cloudnet_doppler_lidar:fail? => echec_tache17
+          cloudnet_doppler_lidar? | echec_tache17 => cloudnet_doppler_lidar_wind?
+          cloudnet_doppler_lidar_wind:fail? => echec_tache18
+          cloudnet_doppler_lidar_wind? | echec_tache18 => cloudnet_doppler_lidar_epsilon?
+          cloudnet_doppler_lidar_epsilon:fail? => echec_tache19
+          cloudnet_doppler_lidar_epsilon? | echec_tache19 =>  construct_final_2D?
+          construct_final_2D:fail? => echec_tache20
+          construct_final_2D? | echec_tache20 => menage?
+          menage:fail? => echec_tache21
+          menage? | echec_tache21 => fin
+            """
+
+[runtime]
+    [[root]] # suite defaults
+    init-script = """
+                module unload nco
+                module load nco
+                echo Setting up conda environement
+                eval "$(conda shell.bash hook)"
+                conda activate {{ CONDA_ENV }}
+                echo Conda environment {{ CONDA_ENV }} set.
+                echo $(which python) set.
+                """
+    platform = slurm_local
+    submission retry delays = PT5M, PT10M
+    execution retry delays = PT5M, PT10M
+
+   [[echec<taches>]]
+      script = """ echec_tache.sh ${CYLC_TASK_PARAM_taches}
+"""
+        [[[events]]]
+            mail events = failed, execution timeout, submission failed
+        [[[mail]]]
+            from = {{email_from}}
+            to = {{email_to}}
+
+    [[lancement]]
+      script = """ echo "lancement mensuelle ccres_{{ site }}  date : $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMMDD)-$(date -d "$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d')"
+
+"""
+
+    [[telechargement_cloudnet_1]]
+        submission polling intervals = PT1M
+        execution polling intervals = PT3M
+
+        script = """
+        echo "{{download}} --config {{download_config}} --site {{ site }} --date-from $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMMDD) --date-to $(date -d " $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d')"
+        {{download}} --config {{download_config}} --site {{ site }} --date-from $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMMDD) --date-to $(date -d " $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d')
+"""
+        [[[events]]]
+        mail events = failed, execution timeout, submission failed
+        [[[mail]]]
+            from = {{email_from}}
+            to = {{email_to}}
+        [[[directives]]]
+            --time = 01:00:00
+            --mem = 3500mb
+            --nodes = 1
+            --cpus-per-task = 1
+
+    [[telechargement_cloudnet_2]]
+        submission polling intervals = PT1M
+        execution polling intervals = PT3M
+
+        script = """
+        echo "{{download}} --config {{download_config}} --site {{ site }} --date-from $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMMDD) --date-to $(date -d " $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d')"
+        {{download}} --config {{download_config}} --site {{ site }} --date-from $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMMDD) --date-to $(date -d " $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d')
+"""
+        [[[events]]]
+        mail events = failed, execution timeout, submission failed
+        [[[mail]]]
+            from = {{email_from}}
+            to = {{email_to}}
+        [[[directives]]]
+            --time = 01:00:00
+            --mem = 3500mb
+            --nodes = 1
+            --cpus-per-task = 1
+
+    [[cloudnet<listefilieres>]]
+        submission polling intervals = PT1M
+        execution polling intervals = PT3M
+        script = """
+        echo  "{{superviseur}} {{superviseur_options}} -o init_catalog -d  $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMMDD)-$(date -d " $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f cloudnet_$CYLC_TASK_PARAM_listefilieres -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING"
+        {{superviseur}} {{superviseur_options}} -o init_catalog -d  $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMMDD)-$(date -d " $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f cloudnet_$CYLC_TASK_PARAM_listefilieres -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING
+"""
+        [[[events]]]
+        mail events = failed, execution timeout, submission failed
+        [[[mail]]]
+            from = {{email_from}}
+            to = {{email_to}}
+        [[[directives]]]
+            --time = 01:00:00
+            --mem = 3500mb
+            --nodes = 1
+            --cpus-per-task = 1
+
+    [[construct_final_2D]]
+        submission polling intervals = PT1M
+        execution polling intervals = PT3M
+        script = """
+        echo "{{superviseur}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMMDD)-$(date -d " $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f construct_final_2D -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING"
+        {{superviseur}} -o init_catalog -d $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMMDD)-$(date -d " $(cylc cycle-point $CYLC_TASK_CYCLE_POINT --template=CCYYMM01) + 1 months - 1 days" +'%Y%m%d') -s ccres_{{ site }} -f construct_final_2D -c {{superviseur_config}} --product-version {{ production_version }}  --product-type {{ production_type }} --log-level WARNING
+"""
+        [[[events]]]
+        mail events = failed, execution timeout, submission failed
+        [[[mail]]]
+            from = {{email_from}}
+            to = {{email_to}}
+        [[[directives]]]
+            --time = 01:00:00
+            --mem = 3500mb
+            --nodes = 1
+            --cpus-per-task = 1
+
+  [[menage]]
+        submission polling intervals = PT1M
+        execution polling intervals = PT3M
+        script = """
+               YYYYMM=$(cylc cycle-point $CYLC_TASK_CYCLE_POINT --offset-months=-2 --template=CCYYMM)
+               echo "YYYYMM $YYYYMM"
+               menage.sh
+"""
+        [[[events]]]
+         mail events = failed, execution timeout, submission failed
+        [[[mail]]]
+          from = {{email_from}}
+          to = {{email_to}}
+        [[[directives]]]
+          --export=station={{site}},YYYYMM=$YYYYMM,product_type={{production_type}},product_version={{production_version}},flag_nettoyage=n
+          --mem=3500mb
+          --partition=zen4
+          --time=0:30:00
+          --ntasks=1
+
+    [[fin]]
+      script =  """ echo fin lancement mensuelle ccres_{{ site }}.  """
