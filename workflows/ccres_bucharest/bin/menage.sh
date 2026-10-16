@@ -56,13 +56,11 @@ if [ $rc -eq 1 ]; then
   fi
   product_type=$3
   product_version=$4
-  nettoyage="$5"
+  flag_nettoyage="$5"
 else
-# SPECIAL CYLC
-    YYYYMM=$(date -d "today 2 month ago" +"%Y%m")
-# CALCUL DE YYYY
-    date -d "${YYYYMM}01 2 month ago" +"%Y" >/dev/null
-    rc=$?
+# CALCUL DE YYYY A NETTOYER
+   date -d "${YYYYMM}01 2 month ago" +"%Y" >/dev/null
+   rc=$?
 # MAUVAIS YYYMM
     if [ $rc -ne 0 ]; then
       echo
@@ -70,7 +68,8 @@ else
       echo
       help
     else
-      YYYY=$(date -d "today 2 month ago" +"%Y")
+      YYYY=$(date -d "${YYYYMM}01 2 month ago" +"%Y")
+      YYYYMM=$(date -d "${YYYYMM}01 2 month ago" +"%Y%m")
     fi
 fi # if [ $rc -eq 1 ]; then
 
@@ -82,17 +81,17 @@ fi # if [ $rc -eq 1 ]; then
 # CHANGER POUR S'ALIGNER SUR LE NOM DU REPERTOIRE CREE PAR LE SUPERVISEUR
 product_version_net=$(echo $product_version | sed -e 's/\./_/g')
 echo
-echo "Faire ${YYYYMM} $product_type $product_version_net $nettoyage"
+echo "Faire ${YYYYMM} $product_type $product_version_net $flag_nettoyage"
 echo
 # NETTOYAGE DES FICHIERS ORIGINAUX
 find /scratchx/$USER/cloudnet/$station/$YYYY -type f -name "${YYYYMM}??_*.nc"  -exec echo /bin/rm {} \;
-if [ $nettoyage = 'y' ]; then
+if [ $flag_nettoyage = 'y' ]; then
   find /scratchx/$USER/cloudnet/$station/$YYYY -type f -name "${YYYYMM}??_*.nc"  -exec /bin/rm {} \;
 fi
 # NETTOYAGE DES FICHIERS FILIERES INTERMEDIAIRES
 find /homedata/$USER/ACTRIS/CCRES/pub/reobs/base/ccres_${station}/products/${product_type}_${product_version_net}/treatments \
   -type f -name "*${product_version_net}_${YYYYMM}??_*.nc"  -exec echo /bin/rm {} \;
-if [ $nettoyage = 'y' ]; then
+if [ $flag_nettoyage = 'y' ]; then
   find /homedata/$USER/ACTRIS/CCRES/pub/reobs/base/ccres_${station}/products/${product_type}_${product_version_net}/treatments \
     -type f -name "*${product_version_net}_${YYYYMM}??_*.nc"  -exec /bin/rm {} \;
 fi
