@@ -53,13 +53,11 @@ $> cylc play chaque_mois/ccres_juelich_monthly \
 
 ## Exemple de fichier de paramètres
 
-Il y a 7 variables :
+Il y a 5 variables :
 
 * L'adresse mel de l'administrateur de la suite
 * Les adresses des gestionnaires des suites
 * La liste des filières à traiter
-* Une date de début de traitement
-* Une date de fin de traitement
 * Un identifiant de version à mettre dans les méta-données du fichier netcdf
 * Un identifiant de type de production à mettre dans les méta-données du
     fichier netcdf
