@@ -211,7 +211,7 @@
             to = {{email_to}}
         [[[directives]]]
             --time = 01:00:00
-            --mem = 3500mb
+            --mem = 7000mb
             --nodes = 1
             --cpus-per-task = 1
 
