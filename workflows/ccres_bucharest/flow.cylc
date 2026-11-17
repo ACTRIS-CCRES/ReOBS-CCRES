@@ -71,7 +71,7 @@
 
 [scheduling]
     initial cycle point = now
-    initial cycle point = 20261105T1915
+    initial cycle point = 20261205T1915
     runahead limit = PT1H
 
     [[special tasks]]
@@ -258,8 +258,7 @@
           --partition=zen4
           --time=0:30:00
           --ntasks=1
-
-       --cpus-per-task = 1
+          --cpus-per-task = 1
 
     [[fin]]
       script =  """ echo fin lancement mensuelle ccres ccres_{{ site }}.  """
