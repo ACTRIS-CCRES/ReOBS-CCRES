@@ -4,6 +4,7 @@ workflows/ccres_mensuel/bad_flow.cylc
 workflows/ccres_mensuel/bon_flow.cylc
 workflows/ccres_juelich/prod_flow.cylc
 workflows/ccres_lampedusa/prod_flow.cylc
+workflows/ccres_palaiseau/bin/prod_faire_mel_cylc.sh
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
