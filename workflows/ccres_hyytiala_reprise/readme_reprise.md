@@ -8,7 +8,7 @@ $> cylc --version
 # VOIR LES VERSIONS DISPONIBLES + tabulation
 $> module load cylc/
 cylc/6.11.4  cylc/7.9.5   cylc/8.0.1   cylc/8.0rc1  cylc/8.1.2
-cylc/8.2.2   cylc/8.3.6   cylc/8.4.2
+cylc/8.2.2   cylc/8.3.6   cylc/8.4.2   cylc/8.6.3
 ```
 
 ## Voir ce qui tourne
